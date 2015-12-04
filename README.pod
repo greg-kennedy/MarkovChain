@@ -1,0 +1,74 @@
+=pod
+
+=head1 NAME
+
+MarkovChain - A module using a non-weighted Markov Chain for text manipulation.
+
+=head1 SYNOPSIS
+
+    use MarkovChain;
+    my $chain = new MarkovChain($order,$limit);
+    $chain->add("some string", @list_of_more_strings);
+    print $chain->spew;
+
+=head1 DESCRIPTION
+
+This module creates new sentences from a list of input strings.  After the
+module creation, you should seed the generator with one or more sentences.
+Calling the spew method will print a new sentence composed of words from
+the previous.
+
+=head2 Methods
+
+=over 12
+
+=item C<new>
+
+Returns a new MarkovChain object.
+
+The first parameter to this object sets the "order", or
+length of sub-phrases to use for generation.  Higher order
+leads to more of the input text being preserved, but
+also more coherent output.  Lower is more chaotic.
+Defaults to 3.
+
+The second parameter, "limit", sets a maximum length
+of the output chain.  When the limit is reached, the sentence
+is terminated.  This is primarily used to avoid infinite loops.
+Defaults to 50.
+
+=item C<add>
+
+Adds one or more strings to the class.  This has two effects:
+the first words of the string are added to the "sentence
+beginnings" list.  These are randomly chosen to use later.
+Second, the sentence is parsed into phrases.  Each phrase
+is stored with a follow-up word, and are used to form the output.
+
+Input strings are somewhat normalized for consistency, by removing
+all non-word non-space characters, before usage as lookup keys.
+This helps tokens find more possible matches.  Outputs are not
+normalized, however, so users may wish to remove problematic characters
+such as quotes or parentheses first.
+
+=item C<spew>
+
+Returns a new string, composed randomly from the phrases
+currently added to the class.
+
+=back
+
+=head1 LICENSE
+
+This is released under the Artistic 
+License. See L<perlartistic>.
+
+=head1 AUTHOR
+
+Greg Kennedy - L<http://greg-kennedy.com/>
+
+=head1 SEE ALSO
+
+L<https://en.wikipedia.org/wiki/Markov_chain#Markov_text_generators>
+
+=cut
