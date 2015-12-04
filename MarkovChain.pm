@@ -136,10 +136,10 @@ sub add
       # Now iterate through all words, storing prefix and next-word.
       for my $i (0 ..  (@words - $self->{order} - 1))
       {
-        my $final_index = $i+$self->{order};
+        my $final_index = $i + $self->{order};
 
         # construct multi-word prefix
-        my $prefix = _norm(join ' ', @words[$i .. ($final_index-1)]);
+        my $prefix = _norm(join ' ', @words[$i .. ($final_index - 1)]);
         # Retrieve final word
         my $last_word = $words[$final_index];
 
@@ -172,8 +172,8 @@ sub _link
 
     # Advance prefix and Recurse
     ' ' . $next_word . $self->_link(
-      join(' ', (split /\s+/, $prefix)[1 .. ($self->{order}-1)], $next_word),
-      $depth+1
+      join(' ', (split /\s+/, $prefix)[1 .. ($self->{order} - 1)], $next_word),
+      $depth + 1
     );
   } else {
     # Chain ends.
