@@ -6,7 +6,6 @@ use Carp;
 
 =pod
 
-
 =head1 NAME
 
 MarkovChain - A module using a non-weighted Markov Chain for text manipulation.
