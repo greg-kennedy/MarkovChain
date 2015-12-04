@@ -181,7 +181,7 @@ sub _link
   }
 }
 
-# Return a complete phrase from the M
+# Return a complete phrase from the chain generator
 sub spew
 {
   my $self = shift;
