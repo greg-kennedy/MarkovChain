@@ -127,10 +127,10 @@ sub add
       if (!exists $self->{beginnings}{$norm_beginning})
       {
         # Beginning does not already exist. Create it.
-        $self->{beginnings}{$norm_beginning} = {$beginning => undef};
+        $self->{beginnings}{$norm_beginning} = {$beginning => 1};
       } else {
         # Beginning already exists. Add this punct/caps variant.
-        $self->{beginnings}{$norm_beginning}{$beginning} = undef;
+        $self->{beginnings}{$norm_beginning}{$beginning} = 1;
       }
 
       # Now iterate through all words, storing prefix and next-word.
@@ -147,10 +147,10 @@ sub add
         if (!exists $self->{chains}{$prefix})
         {
           # Prefix does not already exist. Create it.
-          $self->{chains}{$prefix} = {$last_word => undef};
+          $self->{chains}{$prefix} = {$last_word => 1};
         } else {
           # Prefix already exists.  Put this last word as an endpoint.
-          $self->{chains}{$prefix}{$last_word} = undef;
+          $self->{chains}{$prefix}{$last_word} = 1;
         }
       }
     }
