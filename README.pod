@@ -7,7 +7,7 @@ MarkovChain - A module using a non-weighted Markov Chain for text manipulation.
 =head1 SYNOPSIS
 
     use MarkovChain;
-    my $chain = new MarkovChain($order,$limit);
+    my $chain = MarkovChain->new($order, $limit);
     $chain->add("some string", @list_of_more_strings);
     print $chain->spew;
 
@@ -19,8 +19,6 @@ Calling the spew method will print a new sentence composed of words from
 the previous.
 
 =head2 Methods
-
-=over 12
 
 =item C<new>
 
@@ -51,17 +49,16 @@ This helps tokens find more possible matches.  Outputs are not
 normalized, however, so users may wish to remove problematic characters
 such as quotes or parentheses first.
 
+Returns the number of sentences successfully added.
+
 =item C<spew>
 
 Returns a new string, composed randomly from the phrases
 currently added to the class.
 
-=back
-
 =head1 LICENSE
 
-This is released under the Artistic 
-License. See L<perlartistic>.
+This is released under the Artistic License. See L<perlartistic>.
 
 =head1 AUTHOR
 

@@ -2,10 +2,13 @@
 use strict;
 use warnings;
 
+use FindBin qw( $RealBin );
+use lib $RealBin;
+
 use MarkovChain;
 
 # new chain of order 2
-my $chain = new MarkovChain(2);
+my $chain = MarkovChain->new(2);
 
 # All psalms containing "Zion"
 $chain->add(

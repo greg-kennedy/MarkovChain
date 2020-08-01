@@ -2,7 +2,7 @@ package MarkovChain;
 use strict;
 use warnings;
 
-use Carp;
+use Carp qw( carp confess );
 
 =pod
 
@@ -13,7 +13,7 @@ MarkovChain - A module using a non-weighted Markov Chain for text manipulation.
 =head1 SYNOPSIS
 
     use MarkovChain;
-    my $chain = new MarkovChain($order,$limit);
+    my $chain = MarkovChain->new($order, $limit);
     $chain->add("some string", @list_of_more_strings);
     print $chain->spew;
 
@@ -25,8 +25,6 @@ Calling the spew method will print a new sentence composed of words from
 the previous.
 
 =head2 Methods
-
-=over 12
 
 =item C<new>
 
@@ -57,17 +55,16 @@ This helps tokens find more possible matches.  Outputs are not
 normalized, however, so users may wish to remove problematic characters
 such as quotes or parentheses first.
 
+Returns the number of sentences successfully added.
+
 =item C<spew>
 
 Returns a new string, composed randomly from the phrases
 currently added to the class.
 
-=back
-
 =head1 LICENSE
 
-This is released under the Artistic 
-License. See L<perlartistic>.
+This is released under the Artistic License. See L<perlartistic>.
 
 =head1 AUTHOR
 
@@ -80,11 +77,11 @@ L<https://en.wikipedia.org/wiki/Markov_chain#Markov_text_generators>
 =cut
 
 # helper: Trim whitespace
-sub _trim { my $s = shift; $s =~ s/^\s+//; $s =~ s/\s+$//; $s; }
+sub _trim { my $s = shift; $s =~ s/^\s+//; $s =~ s/\s+$//; return $s; }
 # helper: Normalize a string
-sub _norm { my $s = uc shift; $s =~ s/[^\w ]//; _trim($s); }
+sub _norm { my $s = uc shift; $s =~ s/[^\w ]//; return _trim($s); }
 # helper: Pick a random list entry.
-sub _pick { my @a = keys %{+shift}; $a[int rand @a]; }
+sub _pick { my @a = keys %{+shift}; return $a[int rand @a]; }
 
 # Create new Markov object
 sub new
@@ -103,7 +100,7 @@ sub new
   confess "Order is greater than Limit!" if $self{order} > $self{limit};
 
   # Bless this class and return
-  bless \%self, $class;
+  return bless \%self, $class;
 }
 
 # Tokenize a sentence and add it to the Markov chain hash
@@ -111,6 +108,7 @@ sub add
 {
   my $self = shift;
 
+  my $added = 0;
   for my $sentence (@_)
   {
     my @words = split /\s+/, _trim($sentence);
@@ -153,8 +151,11 @@ sub add
           $self->{chains}{$prefix}{$last_word} = 1;
         }
       }
+      $added ++;
     }
   }
+
+  return $added;
 }
 
 # Return the next link in a Markovchain
@@ -171,13 +172,13 @@ sub _link
     my $next_word = _pick($self->{chains}{$prefix});
 
     # Advance prefix and Recurse
-    ' ' . $next_word . $self->_link(
+    return ' ' . $next_word . $self->_link(
       join(' ', (split /\s+/, $prefix)[1 .. ($self->{order} - 1)], $next_word),
       $depth + 1
     );
   } else {
     # Chain ends.
-    '';
+    return '';
   }
 }
 
@@ -190,7 +191,7 @@ sub spew
   my $prefix = _pick($self->{beginnings}{_pick($self->{beginnings})});
 
   # Compose a sentence.
-  $prefix . $self->_link($prefix,1);
+  return $prefix . $self->_link($prefix,1);
 }
 
 1;
